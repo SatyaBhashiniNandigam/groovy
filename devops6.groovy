@@ -1,4 +1,4 @@
-job("task6-job1") {
+job("job1") {
   description("This job will pull the github repo on every push, update the container using given Dockerfile and push image to DockerHub")
   
   scm {
@@ -16,7 +16,7 @@ job("task6-job1") {
   steps {
     dockerBuildAndPublish {
       repositoryName('satyabhashini/dynamicjenkin')
-      tag("latest")
+      tag("v1")
       dockerHostURI('tcp://0.0.0.0:4243')
       registryCredentials('docker-hub')
       createFingerprints(false)
@@ -27,7 +27,7 @@ job("task6-job1") {
   
 }
 
-job("task6-job2") {
+job("job2") {
   description("This will run on slave nodes and control K8S.")
   triggers {
     upstream('job1', 'SUCCESS')
@@ -43,7 +43,7 @@ then
 		sudo kubectl rollout restart deployment/webserver
 		sudo kubectl rollout status deployment/webserver
   else
-		sudo kubectl create deployment webserver --image=satyabhashini/dynamicjenkin:latest
+		sudo kubectl create deployment webserver --image=satyabhashini/dynamicjenkin:v1
 		sudo kubectl scale deployment webserver --replicas=3
 		sudo kubectl expose deployment webserver --port 80 --type NodePort
 	fi
@@ -56,7 +56,7 @@ fi
   
 }
 
-job("task6-job3") {
+job("job3") {
   description ("It will test if pod is running else send a mail")
   
   triggers {
