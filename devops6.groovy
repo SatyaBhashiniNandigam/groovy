@@ -1,4 +1,4 @@
-job("job1") {
+job("task6-job1") {
   description("This job will pull the github repo on every push, update the container using given Dockerfile and push image to DockerHub")
   
   scm {
@@ -27,7 +27,7 @@ job("job1") {
   
 }
 
-job("job2") {
+job("task6-job2") {
   description("This will run on slave nodes and control K8S.")
   triggers {
     upstream('job1', 'SUCCESS')
@@ -56,7 +56,7 @@ fi
   
 }
 
-job("job3") {
+job("task6-job3") {
   description ("It will test if pod is running else send a mail")
   
   triggers {
